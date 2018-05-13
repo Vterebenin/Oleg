@@ -1,6 +1,6 @@
 module OlegsHelper
 	def film_to_oleg(film)
-		film = film.split(' ')
+		p film = film.split(' ')
 		n = ""
 		hash = Hash[film.map.with_index.to_a]
 		i = 0

@@ -48,7 +48,11 @@ adj = tgr.get_adjectives(tagged)
 nps = tgr.get_noun_phrases(tagged)
 
 #=> {"Alice"=>1, "cat"=>1, "fat cat"=>1, "big fat cat"=>1}
-
+def find_verb(string)
+	tgr = EngTagger.new
+	p word_list = tgr.get_words(string).to_a
+	p word_list[1][0]
+end
 def film_to_oleg(film)
 	film = film.split(' ')
 	if film.length > 1
@@ -63,9 +67,10 @@ def film_to_oleg(film)
 			i += 1
 		end
 		if film.include?("Oleg")
-			film.join(" ")
+			p film.join(" ")
+			
 		else
-			film.join(" ")
+			p film.join(" ")
 		end
 	else
 		film_to_oleg(film)
@@ -76,11 +81,6 @@ end
 film_to_oleg("У холмов есть глаза")
 film_to_oleg("У нее")
 film_to_oleg("У нее 123 ртов")
-
-
-
-
-
 
 Tmdb::Api.key("4064d13e9116b37aae49a206632207e9")
 #p @search.resource(imdb_id) # determines type of resource
@@ -98,10 +98,12 @@ def get_random_film_name
 		end
 	else
 		get_random_film_name
+
 	end
+	p find_verb(m)
 end
 
-get_random_film_name
+#get_random_film_name
 
 # r = Random.new
 # 39.times do |i|
@@ -110,4 +112,8 @@ get_random_film_name
 #   sleep(4)
 # end
 
-film_to_oleg(get_random_film_name)
+
+
+
+#film_to_oleg(get_random_film_name)
+find_verb("Alice chased the big fat cat.")
