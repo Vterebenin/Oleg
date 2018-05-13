@@ -1,7 +1,6 @@
 module OlegsHelper
 	def film_to_oleg(film)
 		film = film.split(' ')
-		p film
 		n = ""
 		hash = Hash[film.map.with_index.to_a]
 		i = 0
@@ -27,10 +26,16 @@ module OlegsHelper
 			 	get_random_film_name
 			else  	
 				m = movie['movie_results'][0]['title']
-				p m
+				if m.split(" ").length > 1
+		 			m
+		 		else
+		 			get_random_film_name
+				end
 			end
 		else
 			get_random_film_name
 		end
+		
 	end
+	# 
 end
