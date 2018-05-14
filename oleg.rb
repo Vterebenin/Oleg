@@ -11,6 +11,8 @@ Tmdb::Api.language("en")
 def find_verbs(string)
 	# Подключаем таггер, массив цензуры, и правильный массив цензуры
 	tgr = EngTagger.new
+	p tgr.methods - object.methods
+
 	censure = []
 	right_censure = []
 	i = 0
@@ -50,7 +52,7 @@ def film_to_oleg(film)
 		until (i >= (film.count * 3)) || film.include?("Oleg") do
 			n = film.sample
 			s = hash[n]
-			if n.length > 3 && !is_a_verb?(n, film.join(' ')) && /[0-9]/.match(n).nil?
+			if n.length > 3 && is_a_noun?(n, film.join(' ')) && /[0-9]/.match(n).nil?
 				n = "Oleg"
 			end
 			film[s] = n
@@ -138,4 +140,8 @@ end
 #
 #p get_valid_film_name(get_random_film_name)
 
-p film_to_oleg(get_valid_film_name(get_random_film_name))
+#p film_to_oleg(get_valid_film_name(get_random_film_name))
+
+
+
+p find_nouns("Alice chased egors find rhino and take take takes took taking the big fat cat.")
