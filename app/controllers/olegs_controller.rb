@@ -8,15 +8,16 @@ class OlegsController < ApplicationController
 
 	def new
 		@oleg = Oleg.new
+		@oleg.filmTitle = film_to_oleg(get_valid_film_name(get_random_film_name))
 		
 	end
 
 
 	def create
-		@task = Oleg.new(params.require(:task).permit(:filmTitle, :answer))
+		@oleg = Oleg.new(params.require(:oleg).permit(:filmTitle, :answer))
 
-		if @task.save
-			redirect_to @task
+		if @oleg.save
+			redirect_to @oleg
 		else
 			render 'New'
 		end
