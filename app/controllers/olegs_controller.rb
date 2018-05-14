@@ -2,6 +2,7 @@ class OlegsController < ApplicationController
 	
 	def index
 		# @name = get_random_film_name
+		@name = ""
 	end
 
 	def create

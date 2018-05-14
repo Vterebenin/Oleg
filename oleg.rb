@@ -2,92 +2,82 @@ require 'rubygems'
 require 'movieDB/base.rb'
 require 'engtagger'
 require 'themoviedb'
-# Create a parser object
-tgr = EngTagger.new
 
-# Sample text
-text = "I fucked alice."
 
-# Add part-of-speech tags to text
-p tagged = tgr.add_tags(text)
+Tmdb::Api.key("4064d13e9116b37aae49a206632207e9")
+Tmdb::Api.language("en")
 
-#=> "<nnp>Alice</nnp> <vbd>chased</vbd> <det>the</det> <jj>big</jj> <jj>fat</jj><nn>cat</nn> <pp>.</pp>"
-
-# Get a list of all nouns and noun phrases with occurrence counts
-p word_list = tgr.get_words(text)
-
-#=> {"Alice"=>1, "cat"=>1, "fat cat"=>1, "big fat cat"=>1}
-
-# Get a readable version of the tagged text
-p readable = tgr.get_readable(text)
-
-#=> "Alice/NNP chased/VBD the/DET big/JJ fat/JJ cat/NN ./PP"
-
-# Get all nouns from a tagged output
-nouns = tgr.get_nouns(tagged)
-
-#=> {"cat"=>1, "Alice"=>1}
-
-# Get all proper nouns
-proper = tgr.get_proper_nouns(tagged)
-
-#=> {"Alice"=>1}
-
-# Get all past tense verbs
-p pt_verbs = tgr.get_verbs(tagged)
-
-#=> {"chased"=>1}
-
-# Get all the adjectives
-adj = tgr.get_adjectives(tagged)
-
-#=> {"big"=>1, "fat"=>1}
-
-# Get all noun phrases of any syntactic level
-# (same as word_list but take a tagged input)
-nps = tgr.get_noun_phrases(tagged)
-
-#=> {"Alice"=>1, "cat"=>1, "fat cat"=>1, "big fat cat"=>1}
-def find_verb(string)
+# Формирует из заданной строки массив со всеми глаголами (англ)
+def find_verbs(string)
+	# Подключаем таггер, массив цензуры, и правильный массив цензуры
 	tgr = EngTagger.new
-	p word_list = tgr.get_words(string).to_a
-	p word_list[1][0]
+	censure = []
+	right_censure = []
+	i = 0
+	# помечаем все слова и знаки тэгами
+	word_list = tgr.add_tags(string)
+	
+	# Здесь идет поиск всех возможных вариаций глаголов 
+	i_verbs 	= tgr.get_infinitive_verbs(word_list).to_a
+	pt_verbs 	= tgr.get_past_tense_verbs(word_list).to_a
+	g_verbs 	= tgr.get_gerund_verbs(word_list).to_a
+	bp_verbs 	= tgr.get_base_present_verbs(word_list).to_a
+	p_verbs 	= tgr.get_passive_verbs(word_list).to_a
+	pr_verbs 	= tgr.get_present_verbs(word_list).to_a
+	
+	censure = i_verbs + pt_verbs + g_verbs + bp_verbs + p_verbs + pr_verbs
+	
+	
+	until i >= censure.length
+		right_censure.push(censure[i][0])
+		i += 1
+	end
+	right_censure
 end
+
+# Проверка на то, является ли данное слово глаголом в данной строке
+def is_a_verb?(word, string)
+	find_verbs(string).include?(word)
+end
+
+# Вовзращает преобразованную строку из символов
 def film_to_oleg(film)
 	film = film.split(' ')
-	if film.length > 1
+	if film.length > 1 && (!film.include?("The"))
 		n = ""
 		hash = Hash[film.map.with_index.to_a]
 		i = 0
-		until (i >= film.count) || film.include?("Oleg") do
+		until (i >= (film.count * 3)) || film.include?("Oleg") do
 			n = film.sample
 			s = hash[n]
-			n = "Oleg" if n.length > 3
+			if n.length > 3 && !is_a_verb?(n, film.join(' ')) && /[0-9]/.match(n).nil?
+				n = "Oleg"
+			end
 			film[s] = n
 			i += 1
 		end
 		if film.include?("Oleg")
-			p film.join(" ")
-			
+			film.join(" ")
 		else
-			p film.join(" ")
+			@film = get_random_film_name
+			@film = get_valid_film_name(@film)
+			film_to_oleg(@film)
 		end
 	else
-		film_to_oleg(film)
+		new_film = get_valid_film_name(get_random_film_name)
+		film_to_oleg(new_film)
 	end
 end
 
 # p 
-film_to_oleg("У холмов есть глаза")
-film_to_oleg("У нее")
-film_to_oleg("У нее 123 ртов")
 
-Tmdb::Api.key("4064d13e9116b37aae49a206632207e9")
+
+
 #p @search.resource(imdb_id) # determines type of resource
 p #@search.query('samuel jackson') # the query to search against
 def get_random_film_name
 	r = Random.new			
-	test = "tt0" + r.rand(300000).to_s
+	test = "tt" + r.rand(3000000).to_s
 	movie = Tmdb::Find.imdb_id(test)
 	if movie.keys.include?('movie_results')
 		if movie['movie_results'].empty?
@@ -100,7 +90,7 @@ def get_random_film_name
 		get_random_film_name
 
 	end
-	p find_verb(m)
+	#p find_verbs(m)
 end
 
 #get_random_film_name
@@ -111,9 +101,41 @@ end
 #   r.rand(300000)
 #   sleep(4)
 # end
+#film_to_oleg("The hills have eyes")
+#film_to_oleg("У нее")
+#film_to_oleg("У нее 123 ртов")
 
 
+#t = Time.now
+##film_to_oleg(get_random_film_name)
+##find_verbs("Alice chased and take take takes took taking the big fat cat.")
+#T = Time.now
+#p is_a_verb?("take", "Alice chased and take take takes took taking the big fat cat.")
+#p TN = Time.now - T
 
 
-#film_to_oleg(get_random_film_name)
-find_verb("Alice chased the big fat cat.")
+def match_numbers(str)
+	!/[0-9]/.match(str).nil?	
+end
+
+def get_valid_film_name(film)
+	tgr = EngTagger.new
+	valid_words = tgr.add_tags(film)
+	valid_words_1 = tgr.get_nouns(valid_words)
+	if !valid_words_1.nil?
+		film
+	else
+		film = get_random_film_name
+		get_valid_film_name(film)
+	end
+	#film = "1942 abc zxcac"
+
+end
+
+#p match_numbers("1942 abc zxc")
+#
+#p film_to_oleg("1942 abc zxcac")
+#
+#p get_valid_film_name(get_random_film_name)
+
+p film_to_oleg(get_valid_film_name(get_random_film_name))
