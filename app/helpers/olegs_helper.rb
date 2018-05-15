@@ -28,12 +28,10 @@ module OlegsHelper
 			if film.include?("Oleg") || film.include?("Olegs")
 				film.join(" ")
 			else
-				@film = get_random_film_name
-				@film = get_valid_film_name(@film)
-				film_to_oleg(@film)
+				film_to_oleg(film.join(" "))
 			end
 		else
-			new_film = get_valid_film_name(get_random_film_name)
+			new_film = get_random_film_name
 			film_to_oleg(new_film)
 		end
 	end
@@ -105,6 +103,13 @@ module OlegsHelper
 		r = Random.new
 		a = ["Okay, you win.. for now.", "You are right!",
 		"It was too easy, isnt it?"]
+		a[r.rand(a.length)]
+	end
+
+	def bad_notice
+		r = Random.new
+		a = ["Nah, wrong.. for now.", "You are right! ... JK!",
+		"Are you even trying?"]
 		a[r.rand(a.length)]
 	end
 

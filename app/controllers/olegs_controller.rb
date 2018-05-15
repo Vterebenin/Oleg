@@ -10,16 +10,16 @@ class OlegsController < ApplicationController
 	def new
 		@oleg = Oleg.new
 		@oleg.filmTitle = film_to_oleg(get_random_film_name)
-		@ranswer ||= @answer
 	end
 
 
 	def create
-		@oleg = Oleg.new(params.require(:oleg).permit(:filmTitle, :answer))		
+		@oleg = Oleg.new(params.require(:oleg).permit(:answer))		
 		if @oleg.save
 			flash[:notice] = good_notice
 			redirect_to new_oleg_path
 		else
+			flash[:alert] = bad_notice
 			redirect_to root_path
 		end
 	end

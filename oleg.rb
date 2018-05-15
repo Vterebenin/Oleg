@@ -3,43 +3,37 @@ require 'movieDB/base.rb'
 require 'engtagger'
 require 'themoviedb'
 
+#require 'ruby-tmdb'
+
 
 Tmdb::Api.key("4064d13e9116b37aae49a206632207e9")
 Tmdb::Api.language("en")
+#Tmdb.api_key = "4064d13e9116b37aae49a206632207e9"
+#Tmdb.default_language = "en"
 
-# Формирует из заданной строки массив со всеми глаголами (англ)
-def find_verbs(string)
+# Формирует из заданной строки массив со всеми существительными (англ)
+def find_nouns(string)
 	# Подключаем таггер, массив цензуры, и правильный массив цензуры
 	tgr = EngTagger.new
-	p tgr.methods - object.methods
-
-	censure = []
+	#p tgr.methods - Object.methods
 	right_censure = []
 	i = 0
 	# помечаем все слова и знаки тэгами
 	word_list = tgr.add_tags(string)
 	
-	# Здесь идет поиск всех возможных вариаций глаголов 
-	i_verbs 	= tgr.get_infinitive_verbs(word_list).to_a
-	pt_verbs 	= tgr.get_past_tense_verbs(word_list).to_a
-	g_verbs 	= tgr.get_gerund_verbs(word_list).to_a
-	bp_verbs 	= tgr.get_base_present_verbs(word_list).to_a
-	p_verbs 	= tgr.get_passive_verbs(word_list).to_a
-	pr_verbs 	= tgr.get_present_verbs(word_list).to_a
+	# Поиск всех существительных 
+	nouns 	= tgr.get_words(word_list).to_a
 	
-	censure = i_verbs + pt_verbs + g_verbs + bp_verbs + p_verbs + pr_verbs
-	
-	
-	until i >= censure.length
-		right_censure.push(censure[i][0])
+	until i >= nouns.length
+		right_censure.push(nouns[i][0])
 		i += 1
 	end
 	right_censure
 end
 
 # Проверка на то, является ли данное слово глаголом в данной строке
-def is_a_verb?(word, string)
-	find_verbs(string).include?(word)
+def is_a_noun?(word, string)
+	find_nouns(string).include?(word)
 end
 
 # Вовзращает преобразованную строку из символов
@@ -79,41 +73,16 @@ end
 p #@search.query('samuel jackson') # the query to search against
 def get_random_film_name
 	r = Random.new			
-	test = "tt" + r.rand(3000000).to_s
-	movie = Tmdb::Find.imdb_id(test)
-	if movie.keys.include?('movie_results')
-		if movie['movie_results'].empty?
-		 	get_random_film_name
-		else  	
-			m = movie['movie_results'][0]['title']
-			p m
-		end
+	random_imdb_id = "tt0" + r.rand(300000).to_s
+	movie = Tmdb::Find.imdb_id(random_imdb_id)
+	if movie.keys.include?('movie_results') && !movie['movie_results'].empty?
+		m = movie['movie_results'][0]['title']
+		#m if !(m.include?("The") && m.length > 1
 	else
 		get_random_film_name
-
 	end
-	#p find_verbs(m)
 end
 
-#get_random_film_name
-
-# r = Random.new
-# 39.times do |i|
-#   sprintf '%07d'
-#   r.rand(300000)
-#   sleep(4)
-# end
-#film_to_oleg("The hills have eyes")
-#film_to_oleg("У нее")
-#film_to_oleg("У нее 123 ртов")
-
-
-#t = Time.now
-##film_to_oleg(get_random_film_name)
-##find_verbs("Alice chased and take take takes took taking the big fat cat.")
-#T = Time.now
-#p is_a_verb?("take", "Alice chased and take take takes took taking the big fat cat.")
-#p TN = Time.now - T
 
 
 def match_numbers(str)
@@ -138,10 +107,14 @@ end
 #
 #p film_to_oleg("1942 abc zxcac")
 #
-#p get_valid_film_name(get_random_film_name)
+T = Time.now
+
+p get_random_film_name
+p TN = Time.now - T
+
 
 #p film_to_oleg(get_valid_film_name(get_random_film_name))
 
 
 
-p find_nouns("Alice chased egors find rhino and take take takes took taking the big fat cat.")
+#p find_nouns("Alice chased egors find rhino and take take takes took taking the big fat cat.")
