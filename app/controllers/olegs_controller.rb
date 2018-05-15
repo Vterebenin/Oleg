@@ -1,6 +1,7 @@
 class OlegsController < ApplicationController
 	include OlegsHelper
 	before_action :find_oleg, only: [:show, :edit, :update, :destroy]
+	
 	def index
 		@name = get_random_film_name
 		@oleg = Oleg.new
@@ -8,18 +9,18 @@ class OlegsController < ApplicationController
 
 	def new
 		@oleg = Oleg.new
-		@oleg.filmTitle = film_to_oleg(get_valid_film_name(get_random_film_name))
-		
+		@oleg.filmTitle = film_to_oleg(get_random_film_name)
+		@ranswer ||= @answer
 	end
 
 
 	def create
-		@oleg = Oleg.new(params.require(:oleg).permit(:filmTitle, :answer))
-
+		@oleg = Oleg.new(params.require(:oleg).permit(:filmTitle, :answer))		
 		if @oleg.save
-			redirect_to @oleg
+			flash[:notice] = good_notice
+			redirect_to new_oleg_path
 		else
-			render 'New'
+			redirect_to root_path
 		end
 	end
 

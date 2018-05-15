@@ -3,6 +3,7 @@ module OlegsHelper
 	# Вовзращает преобразованную строку из символов
 	def film_to_oleg(film)
 		p @answer = film # D E B U G !!!!
+		p $answer = film
 		film = film.split(' ') # раскладываем фильм на слова
 		# Если фильм не состоит из двух слов с The и если его длина больше 1
 		if film.length > 1 && !(film.include?("The") && film.length == 2)
@@ -40,22 +41,15 @@ module OlegsHelper
 	def get_random_film_name
 		r = Random.new	
 		# Ищем случайный фильм с imdb		
-		test = "tt" + r.rand(3000000).to_s
-		movie = Tmdb::Find.imdb_id(test)
+		random_imdb_id = "tt" + r.rand(7).to_s + r.rand(900000).to_s
+		movie = Tmdb::Find.imdb_id(random_imdb_id)
 
 		# обрабатываем хэш, полученный с imdb
-		if movie.keys.include?('movie_results')
-			# если результаты айди по фильмам пустые
-			if movie['movie_results'].empty?
-				# рекурсия
-			 	get_random_film_name
-			else # если результаты по фильмам не пустые
-				# вывести хэш тайтла
-				m = movie['movie_results'][0]['title']
-				# D E B U G
-				p m
-			end
-		else # если айди не включает фильмы
+		if movie.keys.include?('movie_results') && !movie['movie_results'].empty?
+			# если результаты по фильмам не пустые
+			# вывести хэш тайтла
+		 	m = movie['movie_results'][0]['title']
+		else # если результаты айди по фильмам пустые
 			# рекурсия
 			get_random_film_name
 		end
@@ -105,6 +99,13 @@ module OlegsHelper
 	# Проверка на то, является ли данное слово глаголом в данной строке
 	def is_a_noun?(word, string)
 		find_nouns(string).include?(word)
+	end
+
+	def good_notice
+		r = Random.new
+		a = ["Okay, you win.. for now.", "You are right!",
+		"It was too easy, isnt it?"]
+		a[r.rand(a.length)]
 	end
 
 end
