@@ -20,7 +20,7 @@ class OlegsController < ApplicationController
 			redirect_to new_oleg_path
 		else
 			flash[:alert] = bad_notice
-			redirect_to root_path
+			redirect_to new_oleg_path
 		end
 	end
 
