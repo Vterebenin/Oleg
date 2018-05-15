@@ -6,40 +6,35 @@ module OlegsHelper
 		p $answer = film
 		film = film.split(' ') # раскладываем фильм на слова
 		# Если фильм не состоит из двух слов с The и если его длина больше 1
-		if film.length > 1 && !(film.include?("The") && film.length == 2)
-			n = ""
-			hash = Hash[film.map.with_index.to_a]
-			i = 0
-			until (i >= (film.count)) ||
-				  film.include?("Oleg") ||
-				  film.include?("Olegs") do
-				n = film.sample
-				s = hash[n]
-				if n.length > 3 && is_a_noun?(n, film.join(' ')) && /[0-9]/.match(n).nil?
-					if test_singularity(n)
-						n = "Oleg"
-					else
-						n = "Olegs"
-					end
+		n = ""
+		hash = Hash[film.map.with_index.to_a]
+		i = 0
+		until (i >= (film.count)) ||
+			  film.include?("Oleg") ||
+			  film.include?("Olegs") do
+			n = film.sample
+			s = hash[n]
+			if n.length > 3 && is_a_noun?(n, film.join(' ')) && /[0-9]/.match(n).nil?
+				if test_singularity(n)
+					n = "Oleg"
+				else
+					n = "Olegs"
 				end
-				film[s] = n
-				i += 1
 			end
-			if film.include?("Oleg") || film.include?("Olegs")
-				film.join(" ")
-			else
-				film_to_oleg(film.join(" "))
-			end
+			film[s] = n
+			i += 1
+		end
+		if film.include?("Oleg") || film.include?("Olegs")
+			film.join(" ")
 		else
-			new_film = get_random_film_name
-			film_to_oleg(new_film)
+			film_to_oleg(film)
 		end
 	end
 
-	def get_random_film_name
+	def get_random_film_name1
 		r = Random.new	
 		# Ищем случайный фильм с imdb		
-		random_imdb_id = "tt" + r.rand(7).to_s + r.rand(900000).to_s
+		random_imdb_id = "tt0" + Random.rand(300000).to_s
 		movie = Tmdb::Find.imdb_id(random_imdb_id)
 
 		# обрабатываем хэш, полученный с imdb
@@ -49,6 +44,21 @@ module OlegsHelper
 		 	m = movie['movie_results'][0]['title']
 		else # если результаты айди по фильмам пустые
 			# рекурсия
+			get_random_film_name
+		end
+	end
+
+	def get_random_film_name		
+		random_imdb_id = "tt0" + Random.rand(300000).to_s
+		movie = Tmdb::Find.imdb_id(random_imdb_id)
+		if movie.keys.include?('movie_results') && !movie['movie_results'].empty?
+			m = movie['movie_results'][0]['title'] 
+			if !(m.include?("The")) && m.length > 1
+				m
+			else
+				get_random_film_name
+			end
+		else
 			get_random_film_name
 		end
 	end

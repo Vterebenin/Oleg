@@ -39,30 +39,28 @@ end
 # Вовзращает преобразованную строку из символов
 def film_to_oleg(film)
 	film = film.split(' ')
-	if film.length > 1 && (!film.include?("The"))
-		n = ""
-		hash = Hash[film.map.with_index.to_a]
-		i = 0
-		until (i >= (film.count * 3)) || film.include?("Oleg") do
-			n = film.sample
-			s = hash[n]
-			if n.length > 3 && is_a_noun?(n, film.join(' ')) && /[0-9]/.match(n).nil?
-				n = "Oleg"
-			end
-			film[s] = n
-			i += 1
+	#if film.length > 1 && (!film.include?("The"))
+	n = ""
+	hash = Hash[film.map.with_index.to_a]
+	i = 0
+	until (i >= (film.count * 3)) || film.include?("Oleg") do
+		n = film.sample
+		s = hash[n]
+		if n.length > 3 && is_a_noun?(n, film.join(' ')) && /[0-9]/.match(n).nil?
+			n = "Oleg"
 		end
-		if film.include?("Oleg")
-			film.join(" ")
-		else
-			@film = get_random_film_name
-			@film = get_valid_film_name(@film)
-			film_to_oleg(@film)
-		end
-	else
-		new_film = get_valid_film_name(get_random_film_name)
-		film_to_oleg(new_film)
+		film[s] = n
+		i += 1
 	end
+	if film.include?("Oleg")
+		film.join(" ")
+	else
+		film_to_oleg(film)
+	end
+	#else
+	#	new_film = get_valid_film_name(get_random_film_name)
+	#	film_to_oleg(new_film)
+	#end
 end
 
 # p 
@@ -71,13 +69,16 @@ end
 
 #p @search.resource(imdb_id) # determines type of resource
 p #@search.query('samuel jackson') # the query to search against
-def get_random_film_name
-	r = Random.new			
-	random_imdb_id = "tt0" + r.rand(300000).to_s
+def get_random_film_name		
+	random_imdb_id = "tt0" + Random.rand(300000).to_s
 	movie = Tmdb::Find.imdb_id(random_imdb_id)
 	if movie.keys.include?('movie_results') && !movie['movie_results'].empty?
-		m = movie['movie_results'][0]['title']
-		#m if !(m.include?("The") && m.length > 1
+		m = movie['movie_results'][0]['title'] 
+		if !(m.include?("The")) && m.length > 1
+			m
+		else
+			get_random_film_name
+		end
 	else
 		get_random_film_name
 	end
@@ -109,7 +110,7 @@ end
 #
 T = Time.now
 
-p get_random_film_name
+p film_to_oleg(get_random_film_name)
 p TN = Time.now - T
 
 
