@@ -27,8 +27,8 @@ module OlegsHelper
 		if film.include?("Oleg") || film.include?("Olegs")
 			film.join(" ")
 		else
-			@film = @answer
-			film_to_oleg(@film)
+			
+			film_to_oleg(get_random_film_name)
 		end
 	end
 
@@ -53,12 +53,13 @@ module OlegsHelper
 		random_imdb_id = "tt0" + Random.rand(300000).to_s
 		movie = Tmdb::Find.imdb_id(random_imdb_id)
 		if movie.keys.include?('movie_results') && !movie['movie_results'].empty?
-			m = movie['movie_results'][0]['title'] 
-			if ((m.include?("The")) && m.length == 2) && m.length > 1
-				m
-			else
+			m = movie['movie_results'][0]['title'].split(' ') 
+			if (m.include?("The") && m.length == 2) || m.length == 1
 				get_random_film_name
+			else
+				m.join(' ')
 			end
+
 		else
 			get_random_film_name
 		end

@@ -73,11 +73,11 @@ def get_random_film_name
 	random_imdb_id = "tt0" + Random.rand(300000).to_s
 	movie = Tmdb::Find.imdb_id(random_imdb_id)
 	if movie.keys.include?('movie_results') && !movie['movie_results'].empty?
-		m = movie['movie_results'][0]['title'] 
-		if !(m.include?("The")) && m.length > 1
-			m
-		else
+		m = movie['movie_results'][0]['title'].split(' ') 
+		if (m.include?("The") && m.length == 2) || m.length == 1
 			get_random_film_name
+		else
+			m
 		end
 	else
 		get_random_film_name
@@ -110,8 +110,11 @@ end
 #
 T = Time.now
 
-p film_to_oleg(get_random_film_name)
+p get_random_film_name
 p TN = Time.now - T
+a = "1"
+a.split(' ')
+
 
 
 #p film_to_oleg(get_valid_film_name(get_random_film_name))

@@ -3,8 +3,7 @@ class OlegsController < ApplicationController
 	before_action :find_oleg, only: [:show, :edit, :update, :destroy]
 	
 	def index
-		@name = get_random_film_name
-		@oleg = Oleg.new
+	
 	end
 
 	def new
