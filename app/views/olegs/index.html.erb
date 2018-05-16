@@ -4,3 +4,19 @@
 <br>
 
 
+<% if @plays.count == 0 %>
+	<h3>Pathetic. You have 0 answer.</h3>
+	<p>Oleg disrespects you...</p>
+<% else %>
+	<div class="row">
+		<% @olegs.each do |oleg| %>
+			<div class="col-md-3">
+				<%= oleg.answer %>		
+				<%= oleg.filmTitle %>
+
+			</div>
+		<% end %>
+	</div>
+<% end %>
+
+

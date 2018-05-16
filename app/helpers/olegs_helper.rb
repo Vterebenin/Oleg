@@ -65,22 +65,6 @@ module OlegsHelper
 		end
 	end
 
-	# искать фильмы пока не найдется хотя бы одно валидное имя
-	def get_valid_film_name(film)
-		tgr = EngTagger.new
-		tagged = tgr.add_tags(film)
-		valid_words = tgr.get_nouns(tagged)
-
-		# если есть существительные
-		if !valid_words.nil?
-			# проходит проверку
-			film 
-		else # зацикливаем пока не найдем валидный фильм
-			film = get_random_film_name
-			get_valid_film_name(film)
-		end
-	end
-
 	# протестировать на сингулярность(множественное число будет false)
 	def test_singularity(str)
   	str.pluralize != str && str.singularize == str
@@ -112,17 +96,16 @@ module OlegsHelper
 	end
 
 	def good_notice
-		r = Random.new
-		a = ["Okay, you win.. for now.", "You are right!",
+		good_message = ["Okay, you win.. for now.", "You are right!",
 		"It was too easy, isnt it?"]
-		a[r.rand(a.length)]
+		good_message[Random.rand(good_message.length)]
 	end
 
 	def bad_notice
-		r = Random.new
-		a = ["Nah, wrong.. for now.", "You are right! ... JK!",
-		"Are you even trying?"]
-		a[r.rand(a.length)]
+		bad_message = ["Nah, wrong.. for now.", 
+				 "You are right! ... JK!",
+					"Are you even trying?"]
+		bad_message[Random.rand(bad_message.length)]
 	end
 
 end

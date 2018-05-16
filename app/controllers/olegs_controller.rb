@@ -3,7 +3,7 @@ class OlegsController < ApplicationController
 	before_action :find_oleg, only: [:show, :edit, :update, :destroy]
 	
 	def index
-	
+		@olegs = Olegs.all.order("created_at DESC")
 	end
 
 	def new
@@ -18,24 +18,12 @@ class OlegsController < ApplicationController
 			flash[:notice] = good_notice
 			redirect_to new_oleg_path
 		else
-			flash[:alert] = bad_notice
+			flash[:notice] = bad_notice
 			redirect_to new_oleg_path
 		end
 	end
 
 	def show
-		#
-	end
-
-	def edit
-		#
-	end
-
-	def update
-		#
-	end
-
-	def destroy
 		#
 	end
 
