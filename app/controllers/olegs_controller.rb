@@ -1,9 +1,15 @@
 class OlegsController < ApplicationController
 	include OlegsHelper
+	before_action :authenticate_user!, except: [:index]
 	before_action :find_oleg, only: [:show, :edit, :update, :destroy]
 	
 	def index
-		@olegs = Oleg.all.order("created_at DESC")
+		if user_signed_in? 
+			@olegs = Oleg.all.order("created_at DESC")
+		else
+			@oleg = Oleg.new
+			@oleg.filmTitle = film_to_oleg(get_random_film_name)
+		end
 	end
 
 	def new

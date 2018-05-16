@@ -1,8 +1,6 @@
 
-
-
-<% if @olegs.count == 0 %>
-	<h3>Pathetic. You have 0 answer.</h3>
+<% if @olegs.nil? %>
+	<h3>Pathetic. You have 0 answers.</h3>
 	<p>	Oleg is upset about you...</p>
 	<%= link_to "I will not upset Oleg anymore", new_oleg_path, class: 'btn' %>
 <% else %>

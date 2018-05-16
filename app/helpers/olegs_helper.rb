@@ -49,6 +49,13 @@ module OlegsHelper
 		end
 	end
 
+	def only_3_symbol_nouns?(str)
+		nouns = find_nouns(str.join(' '))
+		answer = true
+		nouns.each {|elem| elem.length > 3 ? answer = false : "" }
+		answer
+	end
+
 	def get_random_film_name		
 		random_imdb_id = "tt0" + Random.rand(300000).to_s
 		movie = Tmdb::Find.imdb_id(random_imdb_id)
@@ -56,7 +63,7 @@ module OlegsHelper
 			 			 !movie['movie_results'].empty? && # есть фильмы
 			  			movie['movie_results'][0]['original_language'] == "en" # и оригинальный язык названия английский
 			m = movie['movie_results'][0]['title'].split(' ') 
-			if (m.include?("The") && m.length == 2) || m.length == 1 || find_nouns(m.join(' ')).nil?
+			if (m.include?("The") && m.length == 2) || m.length == 1 || only_3_symbol_nouns?(m)
 				get_random_film_name
 			else
 				m.join(' ')

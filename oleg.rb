@@ -134,9 +134,19 @@ def array_print_map(array)
 	array.map { |elem| p elem }
 end
 
-@search = Tmdb::Search.new
-@search.resource('movie') # determines type of resource
-p @search.query('Lazy Little Beaver') # the query to search against
-p result = @search.fetch # makes request
-#p movie['movie_results'][0]['title'].split(' ') 
-p result[0]['original_language']
+#@search = Tmdb::Search.new
+#@search.resource('movie') # determines type of resource
+#p @search.query('Lazy Little Beaver') # the query to search against
+#p result = @search.fetch # makes request
+##p movie['movie_results'][0]['title'].split(' ') 
+#p result[0]['original_language']
+
+def only_3_symbol_nouns?(str)
+	nouns = find_nouns(str.join(' '))
+	answer = true
+	nouns.each {|elem| elem.length > 3 ? answer = false : "" }
+	answer
+end
+
+p only_3_symbol_nouns?(['original', 'lann'])
+p only_3_symbol_nouns?(['ori', 'gin', 'aal'])

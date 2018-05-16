@@ -1,20 +1,25 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>OlegIt</title>
-    <%= csrf_meta_tags %>
-    <%= csp_meta_tag %>
+<head>
+	<title>OlegIt</title>
+	<%= csrf_meta_tags %>
+	<%= csp_meta_tag %>
 
-    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
-  </head>
+	<%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+	<%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+</head>
 
-  <body>
-    <div class="container col-md-6 col-md-offset-3">
-      <% if flash[:notice] %>
-        <div class="notice"><%= flash[:notice] %></div>
-      <% end %>
-      <%= yield %>
-    </div>
-  </body>
+<body>
+
+		<%= render 'layouts/header' %>
+		<!-- There goes content for the application --> 
+		<div class="col-md-6 col-md-offset-3 container">
+		 <% if flash[:notice] %>
+		 <div class="notice"><%= flash[:notice] %></div>
+		 <% end %>
+		 <%= yield %>
+	 </div>
+ </div>
+
+</body>
 </html>
