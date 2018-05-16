@@ -8,8 +8,6 @@ require 'themoviedb'
 
 Tmdb::Api.key("4064d13e9116b37aae49a206632207e9")
 Tmdb::Api.language("en")
-#Tmdb.api_key = "4064d13e9116b37aae49a206632207e9"
-#Tmdb.default_language = "en"
 
 # Формирует из заданной строки массив со всеми существительными (англ)
 def find_nouns(string)
@@ -108,12 +106,12 @@ end
 #
 #p film_to_oleg("1942 abc zxcac")
 #
-T = Time.now
-
-p get_random_film_name
-p TN = Time.now - T
-a = "1"
-a.split(' ')
+#T = Time.now
+#
+#p get_random_film_name
+#p TN = Time.now - T
+#a = "1"
+#a.split(' ')
 
 
 
@@ -122,3 +120,23 @@ a.split(' ')
 
 
 #p find_nouns("Alice chased egors find rhino and take take takes took taking the big fat cat.")
+super_array = (1..1000).to_a
+
+def array_print_while(array)
+	i = 0
+	while i < array.count
+		p array[i]
+		i += 1
+	end
+end
+
+def array_print_map(array)
+	array.map { |elem| p elem }
+end
+
+@search = Tmdb::Search.new
+@search.resource('movie') # determines type of resource
+p @search.query('Lazy Little Beaver') # the query to search against
+p result = @search.fetch # makes request
+#p movie['movie_results'][0]['title'].split(' ') 
+p result[0]['original_language']

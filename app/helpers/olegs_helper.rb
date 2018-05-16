@@ -28,7 +28,7 @@ module OlegsHelper
 			film.join(" ")
 		else
 			
-			film_to_oleg(get_random_film_name)
+			film_to_oleg(film.join(' '))
 		end
 	end
 
@@ -52,9 +52,11 @@ module OlegsHelper
 	def get_random_film_name		
 		random_imdb_id = "tt0" + Random.rand(300000).to_s
 		movie = Tmdb::Find.imdb_id(random_imdb_id)
-		if movie.keys.include?('movie_results') && !movie['movie_results'].empty?
+		if movie.keys.include?('movie_results') &&  # не пустой результат существует
+			 			 !movie['movie_results'].empty? && # есть фильмы
+			  			movie['movie_results'][0]['original_language'] == "en" # и оригинальный язык названия английский
 			m = movie['movie_results'][0]['title'].split(' ') 
-			if (m.include?("The") && m.length == 2) || m.length == 1
+			if (m.include?("The") && m.length == 2) || m.length == 1 || find_nouns(m.join(' ')).nil?
 				get_random_film_name
 			else
 				m.join(' ')
@@ -106,6 +108,10 @@ module OlegsHelper
 				 "You are right! ... JK!",
 					"Are you even trying?"]
 		bad_message[Random.rand(bad_message.length)]
+	end
+
+	def show_film
+		movie = Tmdb::Movie.find(@oleg.answer)
 	end
 
 end

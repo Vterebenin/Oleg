@@ -1,22 +1,24 @@
-<h1>Can you guess it?</h1>
-
-<p>name after "Oleg It":	</p>
-<br>
 
 
-<% if @plays.count == 0 %>
+
+<% if @olegs.count == 0 %>
 	<h3>Pathetic. You have 0 answer.</h3>
-	<p>Oleg disrespects you...</p>
+	<p>	Oleg is upset about you...</p>
+	<%= link_to "I will not upset Oleg anymore", new_oleg_path, class: 'btn' %>
 <% else %>
 	<div class="row">
+		<div class="col-md-10 col-md offset-1">
+			<h1>You have <%= pluralize(@olegs.count, 'right answer') %></h1>
+			<%= link_to "I can do more", new_oleg_path, class: 'btn' %>
+		</div>
 		<% @olegs.each do |oleg| %>
-			<div class="col-md-3">
+			<div class="col-md-6">
 				<%= oleg.answer %>		
 				<%= oleg.filmTitle %>
-
 			</div>
 		<% end %>
 	</div>
 <% end %>
+
 
 

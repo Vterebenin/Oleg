@@ -3,7 +3,7 @@ class OlegsController < ApplicationController
 	before_action :find_oleg, only: [:show, :edit, :update, :destroy]
 	
 	def index
-		@olegs = Olegs.all.order("created_at DESC")
+		@olegs = Oleg.all.order("created_at DESC")
 	end
 
 	def new
