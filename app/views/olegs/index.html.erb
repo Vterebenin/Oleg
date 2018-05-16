@@ -1,4 +1,7 @@
 
+<% if user_signed_in? %>
+
+
 <% if @olegs.nil? %>
 	<h3>Pathetic. You have 0 answers.</h3>
 	<p>	Oleg is upset about you...</p>
@@ -6,8 +9,9 @@
 <% else %>
 	<div class="row">
 		<div class="col-md-10 col-md offset-1">
-			<h1>You have <%= pluralize(@olegs.count, 'right answer') %></h1>
-			<%= link_to "I can do more", new_oleg_path, class: 'btn' %>
+			<h1>You have <%= pluralize(@olegs.count, 'right answer') %> </h1>
+			<h1>and <%= pluralize(current_user.points.to_i, "point") %></h1>				
+			<%= link_to "I can do more", new_oleg_path, class: 'btn btn-default' %>
 		</div>
 		<% @olegs.each do |oleg| %>
 			<div class="col-md-6">
@@ -16,6 +20,20 @@
 			</div>
 		<% end %>
 	</div>
+<% end %>
+
+<% else %>
+	<h1>Oleg make a mess in the town</h1>
+	<h1>We need help</h1>
+	<h1>And only you can help us!</h1>
+	<h1>So.. can you help us and guess it?</h1>
+	<p><%= render 'olegs/form' %></p>
+	<br>
+	<br>
+	<p>
+		<%= link_to "Join army", new_user_registration_path, class: 'btn btn-info' %> or
+		<%= link_to "Back to work", new_user_registration_path, class: 'btn btn-default' %>
+	</p>
 <% end %>
 
 

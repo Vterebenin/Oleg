@@ -5,7 +5,7 @@ class OlegsController < ApplicationController
 	
 	def index
 		if user_signed_in? 
-			@olegs = Oleg.all.order("created_at DESC")
+			@olegs = Oleg.where(user_id: current_user).order("created_at DESC")
 		else
 			@oleg = Oleg.new
 			@oleg.filmTitle = film_to_oleg(get_random_film_name)
@@ -13,20 +13,25 @@ class OlegsController < ApplicationController
 	end
 
 	def new
-		@oleg = Oleg.new
+		@oleg = current_user.olegs.build
 		@oleg.filmTitle = film_to_oleg(get_random_film_name)
 	end
 
 
 	def create
-		@oleg = Oleg.new(params.require(:oleg).permit(:answer))		
+
+		@oleg = current_user.olegs.build(oleg_params)		
 		if @oleg.save
+			current_user.points += (2**(((Oleg.where(user_id: current_user).count)/10).round)).to_f
+			current_user.save
 			flash[:notice] = good_notice
 			redirect_to new_oleg_path
 		else
 			flash[:notice] = bad_notice
 			redirect_to new_oleg_path
 		end
+		
+
 	end
 
 	def show
@@ -35,8 +40,16 @@ class OlegsController < ApplicationController
 
 	private
 
+		def oleg_params
+			params.require(:oleg).permit(:answer)
+		end
+
 		def find_oleg
 			@oleg = Oleg.find(params[:id])
+		end
+
+		def add_points
+			
 		end
 end
 
