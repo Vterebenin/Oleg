@@ -18,3 +18,62 @@
 
 oleg_filmTitle
 	display: none
+
+body 
+	display: flex
+	min-height: 100vh
+	height: 100vh
+	flex-direction: column
+	background-image: url('/assets/tiled_back.png')
+	background-position: 0% 0%
+	background-size: 15% 15%
+	background-repeat: repeat
+	background-origin: padding-box
+	background-clip: border-box
+	background-attachment: scroll
+	background-color: transparent
+
+.jumbotron
+
+.main 
+	flex: 1 0 auto
+
+
+header, footer 
+	background: #ccc
+	h1 
+		padding: 0px
+		margin: 0
+
+footer
+	.row
+		padding: 10px
+		.col
+			float: right
+			text-align: right
+			li
+				list-style-type: none
+				display: inline-block
+
+				
+
+body
+	animation: repeat_background 50s linear infinite
+	-webkit-animation: repeat_background 50s linear infinite
+
+@keyframes repeat_background
+	from
+		background-position: -1000px 100%, 0 0
+
+	to
+		background-position: 0 150%, 0 0
+
+
+@-webkit-keyframes repeat_background
+	from
+		background-position: -1000px 100%, 0 0
+
+	to
+		background-position: 0 150%, 0 0
+
+
