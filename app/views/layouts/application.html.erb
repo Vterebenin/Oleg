@@ -10,28 +10,20 @@
 </head>
 
 <body class="Site">
-
+	
 	<%= render 'layouts/header' %>
+
 	<!-- There goes content for the application --> 
 	<div class="col-lg-6 col-lg-offset-3 row main">
 		<div class="container">
-
-			
 			<% if flash[:notice] %>
-			<div class="notice"><%= flash[:notice] %></div>
+				<div class="notice"><%= flash[:notice] %></div>
 			<% end %>
-
-				<%= yield %>
-
-			
-
+			<%= yield %>
 		</div>
-
 	</div>
+
 	<%= render 'layouts/footer' %>
-
-
-
 
 </body>
 </html>

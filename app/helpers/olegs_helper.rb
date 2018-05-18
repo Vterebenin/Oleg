@@ -1,5 +1,5 @@
 module OlegsHelper
-	@answer = ""
+
 	# Вовзращает преобразованную строку из символов
 	def film_to_oleg(film)
 		p @answer = film # D E B U G !!!!
@@ -14,8 +14,10 @@ module OlegsHelper
 			  film.include?("Olegs") do
 			n = film.sample
 			s = hash[n]
-			if n.length > 3 && is_a_noun?(n, film.join(' ')) && /[0-9]/.match(n).nil?
-				p $word_answer = n
+			if n.length > 3 && 
+				 is_a_noun?(n, film.join(' ')) && 
+				 /[0-9]/.match(n).nil?
+				p $word_answer = n			
 				if test_singularity(n)
 					n = "Oleg"
 				else
@@ -28,7 +30,6 @@ module OlegsHelper
 		if film.include?("Oleg") || film.include?("Olegs")
 			film.join(" ")
 		else
-			
 			film_to_oleg(film.join(' '))
 		end
 	end
@@ -64,7 +65,10 @@ module OlegsHelper
 			 			 !movie['movie_results'].empty? && # есть фильмы
 			  			movie['movie_results'][0]['original_language'] == "en" # и оригинальный язык названия английский
 			m = movie['movie_results'][0]['title'].split(' ') 
-			if (m.include?("The") && m.length == 2) || m.length == 1 || only_3_symbol_nouns?(m)
+			if ((m.include?("Dr.") || m.include?("The")) && m.length == 2) || 
+				m.length == 1 || 
+				only_3_symbol_nouns?(m) ||
+				contain_that_film?(m)
 				get_random_film_name
 			else
 				m.join(' ')
@@ -89,10 +93,8 @@ module OlegsHelper
 		i = 0
 		# помечаем все слова и знаки тэгами
 		word_list = tgr.add_tags(string)
-		
 		# Поиск всех существительных 
-		nouns 	= tgr.get_words(word_list).to_a
-		
+		nouns 		= tgr.get_words(word_list).to_a
 		until i >= nouns.length
 			right_censure.push(nouns[i][0])
 			i += 1
@@ -108,7 +110,11 @@ module OlegsHelper
 	def good_notice
 		good_message = ["Okay, you win.. for now.", "You are right!",
 		"It was too easy, isnt it?"]
-		good_message[Random.rand(good_message.length)]
+		if !user_signed_in?
+			good_message[Random.rand(good_message.length)] + "\nJoin Us, to store your progress!"
+		else
+			good_message[Random.rand(good_message.length)]
+		end
 	end
 
 	def bad_notice
@@ -118,8 +124,11 @@ module OlegsHelper
 		bad_message[Random.rand(bad_message.length)]
 	end
 
-	def show_film
-		movie = Tmdb::Movie.find(@oleg.answer)
+	# Return true, if user is already guess that film
+	def contain_that_film?(film)
+		answer = false
+		Oleg.all.each { |elem| answer = true if elem.filmTitle == film   }
+		answer
 	end
 
 end
