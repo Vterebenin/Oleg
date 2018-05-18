@@ -10,7 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_05_16_183102) do
+ActiveRecord::Schema.define(version: 2018_05_18_130947) do
+
+  create_table "dump_olegs", force: :cascade do |t|
+    t.string "answer"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "olegs", force: :cascade do |t|
     t.string "filmTitle"

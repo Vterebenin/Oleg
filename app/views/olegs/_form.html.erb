@@ -1,5 +1,13 @@
-<%= simple_form_for @oleg do |f| %>
-  <h4><%= @oleg.filmTitle %></h4>	
-  <%= f.input :answer %>
-  <%= f.button :submit, "I guess" %>
+<% if user_signed_in? %>
+	<%= simple_form_for @oleg do |f| %>
+		<h4><%= @oleg.filmTitle %></h4>	
+		<%= f.input :answer %>
+		<%= f.button :submit, "I guess" %>
+	<% end %>
+<% else %>
+	<%= simple_form_for @dump_oleg do |f| %>
+		<h4><%= @teaser %></h4>
+		<%= f.input :answer %>
+		<%= f.button :submit, "I guess" %>
+	<% end %>
 <% end %>

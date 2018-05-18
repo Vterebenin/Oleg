@@ -1,7 +1,4 @@
-class Oleg < ApplicationRecord
-	include OlegsHelper
-  belongs_to :user
-
+class DumpOleg < ApplicationRecord
 	validate :right_answer
 	
 	private
@@ -12,5 +9,4 @@ class Oleg < ApplicationRecord
   			errors.add(:answer, "")
   		end
   	end
-#
 end
