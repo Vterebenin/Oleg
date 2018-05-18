@@ -8,7 +8,7 @@ class Oleg < ApplicationRecord
 
   	#validates the right answer
   	def right_answer
-  		if !(answer == $answer)
+  		if !(answer == $answer) && !(answer == $word_answer)
   			errors.add(:answer, "")
   		end
   	end

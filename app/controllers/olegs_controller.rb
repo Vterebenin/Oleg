@@ -22,6 +22,8 @@ class OlegsController < ApplicationController
 		@oleg = current_user.olegs.build(oleg_params)		
 		if @oleg.save
 			add_points
+			@oleg.filmTitle = $answer
+			@oleg.save
 			current_user.save
 			flash[:notice] = good_notice
 			redirect_to new_oleg_path

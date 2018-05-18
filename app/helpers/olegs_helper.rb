@@ -15,6 +15,7 @@ module OlegsHelper
 			n = film.sample
 			s = hash[n]
 			if n.length > 3 && is_a_noun?(n, film.join(' ')) && /[0-9]/.match(n).nil?
+				p $word_answer = n
 				if test_singularity(n)
 					n = "Oleg"
 				else
